@@ -9,9 +9,8 @@ internal USB to RS-232 converter.  Most radios have 3.5mm keying ports now, so
 this little device can be used to key a radio when the radio is set into
 straight key mode (like a keyer device).
 
-Once the program starts, it will indicate readiness by sending:
+The program expects the USB/Serial device to be ready when the program starts.
 
-"DE AB4MW"  which is my call sign so you don't forget me! :)
+Once the program starts, you will then notice a prompt "Enter text > ".  
 
-You will then notice a prompt "Enter text > ".  Type in the text to send by
-Morse code and it will be keyed to the radio (or code practice oscillator).
+Type in the text to send by Morse code and it will be keyed to the radio (or code practice oscillator).
