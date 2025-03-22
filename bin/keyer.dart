@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+// import 'dart:typed_data';
 import 'dart:io';
 import 'package:libserialport/libserialport.dart';
 import 'alphabet.dart' as alphabet;
@@ -99,7 +99,8 @@ class Keyer {
     String check = '';
     while(true) {
       stdout.write('$_mycall$PROMPT');
-      var lineIn = await stdin.readLineSync();
+      //var lineIn = await stdin.readLineSync();
+      var lineIn = stdin.readLineSync();
       if(lineIn == null || lineIn.isEmpty) { continue;}
       // Test the input line for command strings first
       // and if not a command/config, send the text

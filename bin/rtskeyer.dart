@@ -59,7 +59,7 @@ void main(List<String> arguments) {
     
     // start the keyer process which loops looking for ASCII
     // text from the keyboard to send via Morse code
-    var k = Keyer(speed, port , mycall: mycall);
+    Keyer(speed, port , mycall: mycall);
 
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
