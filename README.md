@@ -9,6 +9,15 @@ internal USB to RS-232 converter.  Most radios have 3.5mm keying ports now, so
 this little device can be used to key a radio when the radio is set into
 straight key mode (like a keyer device).
 
+ This should work with any RS-232 serial port, however, be mindful of any odd
+ keying voltages particularly from older radios.  Modern radios can usually 
+ deal with the RTS keying just fine.
+
+ Check your signal with a remote SDR or a friend to ensure that there are no
+ keying clicks audible over the air.  If so a key click capacitor might have to
+ be introduced to avoid this.  I have not found it to be the case using the
+ USB to RS-232 RTS keying device linked above.
+
 The program expects the USB/Serial device to be ready when the program starts.
 
 Once the program starts, you will then notice a prompt "CALLSIGN> ".  If no
