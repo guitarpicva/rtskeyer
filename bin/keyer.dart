@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:io';
 import 'package:libserialport/libserialport.dart';
 import 'alphabet.dart' as alphabet;
+import 'helptext.dart';
 
 class Keyer {
   String _port = '/dev/ttyUSB0';
@@ -9,13 +10,14 @@ class Keyer {
   int _dit = 60; // 1200/speed in WPM
   int _3dit = 180; // 3 dit lengths at WPM
   int _6dit = 360; // word space 6 dit lengths at WPM
-  String mycall = 'DE AB4MW >';
   late SerialPort _modem;
   late SerialPortConfig spc;
-  final String CRLF = "\r\n";
+  final String CRLF = '\r\n';
+  final String PROMPT = '> ';
+  String _mycall = 'rtskeyer';
   
-  Keyer(int speed, String port)
-  :_speed = speed, _port = port
+  Keyer(int speed, String port, {String mycall = 'rtskeyer'})
+  :_speed = speed, _port = port, _mycall = mycall
   {    
     _dit = (1200/_speed).toInt();
     _3dit = _dit * 3;    
@@ -43,9 +45,9 @@ class Keyer {
 
   Future<void> getSerialPort(String portname) async {
     print("Open Serial Port: $portname");
-    for(var s in SerialPort.availablePorts) {
-      print("Port: $s");
-    }
+    // for(var s in SerialPort.availablePorts) {
+    //   print("Port: $s");
+    // }
     // open the serial port to the "keyer"
     bool open = false;
     spc = SerialPortConfig();
@@ -63,12 +65,10 @@ class Keyer {
       
       if (open) {
         print("Serial Port: $portname is open!");
-        sendCharacters(mycall);
+        print('Speed set to: $_speed WPM');
         final reader = SerialPortReader(_modem);
           reader.stream.listen((data) {
           print('received: $data');
-          Uint8List send = Uint8List.fromList("hello".codeUnits);
-          _modem.write(send);
         });        
       } 
       else {
@@ -96,12 +96,39 @@ class Keyer {
   }
 
   void listenKeys() async  {
+    String check = '';
     while(true) {
-      stdout.write("Enter text >");
+      stdout.write('$_mycall$PROMPT');
       var lineIn = await stdin.readLineSync();
-      //var input = await stdin.pipe();
-      // print('lineIn: $lineIn');
-      sendCharacters(lineIn!);
+      if(lineIn == null || lineIn.isEmpty) { continue;}
+      // Test the input line for command strings first
+      // and if not a command/config, send the text
+      check = '';
+      check = lineIn.length > 3 ? lineIn.substring(0,4): lineIn; // first 4 chars may be a command
+      // check each command in order of typical use for efficiency
+      // print("check: $check");
+      if(check.startsWith('@@')) {
+        print("Speed set to: ${check.substring(2)} WPM");
+        // handle speed change with the text
+        _speed = int.parse(check.substring(2));
+        _dit = (1200/_speed).toInt();
+        _3dit = _dit *3;
+        _6dit = _dit* 6;
+        continue;
+      }
+      else if(check.startsWith('~~')) {
+        // save the config to shared_preferences
+        print('Settings saved!');
+        continue;
+      }
+      else if(check.startsWith('??') ) {
+        print(helptext);
+      }
+      else if(check.startsWith('exit') || check.startsWith('EXIT') ) {
+        exit(0);
+      }
+      // send the chars via Morse
+      sendCharacters(lineIn);
     }
   }
 

@@ -27,6 +27,9 @@ void printUsage(ArgParser argParser) {
 
 void main(List<String> arguments) {
   int speed = 15;
+  String port = '/dev/ttyUSB0';
+  String mycall = 'rtskeyer';
+
   final ArgParser argParser = buildParser();
   try {
     final ArgResults results = argParser.parse(arguments);
@@ -48,13 +51,15 @@ void main(List<String> arguments) {
     // Act on the arguments provided.
     print('Positional arguments: ${results.rest}');
     speed = int.parse(results.arguments[0]);
+    port = results.arguments[1];
+    mycall = results.arguments[2];
     if (verbose) {
       print('[VERBOSE] All arguments: ${results.arguments}');
     }
     
     // start the keyer process which loops looking for ASCII
     // text from the keyboard to send via Morse code
-    var k = Keyer(speed, '/dev/ttyUSB0');
+    var k = Keyer(speed, port , mycall: mycall);
 
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.

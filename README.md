@@ -11,6 +11,11 @@ straight key mode (like a keyer device).
 
 The program expects the USB/Serial device to be ready when the program starts.
 
-Once the program starts, you will then notice a prompt "Enter text > ".  
+Once the program starts, you will then notice a prompt "CALLSIGN> ".  If no
+callsign is supplied it will read "rtskeyer>".
 
 Type in the text to send by Morse code and it will be keyed to the radio (or code practice oscillator).
+
+Invocation example: ./rtskeyer 20 /dev/ttyUSB0 ab4mw  would start the program 
+set at 20 WPM speed, using serial port /dev/ttyUSB0 and showing the callsign
+'ab4mw' at the command prompt.
