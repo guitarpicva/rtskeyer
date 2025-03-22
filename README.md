@@ -16,6 +16,6 @@ callsign is supplied it will read "rtskeyer>".
 
 Type in the text to send by Morse code and it will be keyed to the radio (or code practice oscillator).
 
-Invocation example: ./rtskeyer 20 /dev/ttyUSB0 ab4mw  would start the program 
+Invocation example: ```./rtskeyer 20 /dev/ttyUSB0 ab4mw```  would start the program 
 set at 20 WPM speed, using serial port /dev/ttyUSB0 and showing the callsign
 'ab4mw' at the command prompt.
