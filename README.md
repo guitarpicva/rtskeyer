@@ -41,3 +41,6 @@ Windows
 
 The literal command 'exit' at the start of the command line will immediately
 close the program.
+
+INSTALLATION REQUIREMENTS: libserialport0 (pkg name in Debian and derivatives,
+so ```sudo apt install libserialport0```
