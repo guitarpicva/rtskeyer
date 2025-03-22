@@ -28,3 +28,15 @@ Type in the text to send by Morse code and it will be keyed to the radio (or cod
 Invocation example: ```./rtskeyer 20 /dev/ttyUSB0 ab4mw```  would start the program 
 set at 20 WPM speed, using serial port /dev/ttyUSB0 and showing the callsign
 'ab4mw' at the command prompt.
+
+The command prompt also includes a couple of commands.
+@@nn changes the set speed in WPM, example to change to 22 WPM send @@22 at the command line.
+
+~~ is meant to trigger a save of current configuration to shared_preferences
+but this is not yet implemented and is left as a placeholder.  This may simply 
+be implemented as a config file on the file system, but the thought is to 
+use shared preferences so this may be run on Android/iOS as well as Linux and
+Windows
+
+The literal command 'exit' at the start of the command line will immediately
+close the program.
