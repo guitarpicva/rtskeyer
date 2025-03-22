@@ -1,4 +1,4 @@
-String helptext = '''
+final String helptext = '''
 RTS Keyer Help
 
 Invocation: ./rtskeyer <speed> <serial port>
@@ -14,5 +14,14 @@ Command List
 ?? means display this help text
 @@nn means "Change the keying speed to the one or two digit speed"
 exit or EXIT will close the program
+
+Prosigns/Prowords
+Left side is the prosign to send, and right side is the character to use
+at the command line.
+
+SK = %
+AR = >
+KN = +
+BT = - (dash)
 
 ''';

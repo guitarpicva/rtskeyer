@@ -15,9 +15,10 @@ class Keyer {
   final String CRLF = '\r\n';
   final String PROMPT = '> ';
   String _mycall = 'rtskeyer';
+  bool _debug = false;
   
-  Keyer(int speed, String port, {String mycall = 'rtskeyer'})
-  :_speed = speed, _port = port, _mycall = mycall
+  Keyer(int speed, String port, {String mycall = 'rtskeyer', bool debug = false})
+  :_speed = speed, _port = port, _mycall = mycall, _debug = debug
   {    
     _dit = (1200/_speed).toInt();
     _3dit = _dit * 3;    
@@ -27,7 +28,7 @@ class Keyer {
   }
 
   void sendCharacters(String line) {
-    // print("Dit duration: $_dit");    
+    if(_debug) { print("Dit duration: $_dit"); }
     String abet;
     for(int i = 0; i < line.length; ++i) {
       abet = alphabet.alphabet[line[i].codeUnits.first];
@@ -68,7 +69,7 @@ class Keyer {
         print('Speed set to: $_speed WPM');
         final reader = SerialPortReader(_modem);
           reader.stream.listen((data) {
-          print('received: $data');
+          if(_debug) { print('received: $data'); }
         });        
       } 
       else {
