@@ -44,3 +44,5 @@ close the program.
 
 INSTALLATION REQUIREMENTS: libserialport0 (pkg name in Debian and derivatives,
 so ```sudo apt install libserialport0```
+
+TODO: clean up the command line parsing and checking
