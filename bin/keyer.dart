@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:libserialport/libserialport.dart';
 import 'alphabet.dart' as alphabet;
 import 'helptext.dart';
+import 'macros.dart' as macros;
 
 class Keyer {
   String _port = '/dev/ttyUSB0';
@@ -118,16 +119,35 @@ class Keyer {
         _6dit = _dit* 6;
         continue;
       }
-      else if(check.startsWith('~~')) {
-        // save the config to shared_preferences
-        print('Settings saved!');
+      else if(check.startsWith('^')) {
+        if(check.startsWith('^^')) {
+          print('${macros.printList()}');
+          continue;
+        }
+        print('Sending Macro: ${check.substring(1)}');
+        var macro = macros.getMacro(int.parse(check.substring(1)));
+        sendCharacters(macro);
         continue;
       }
       else if(check.startsWith('??') ) {
         print(helptext);
+        continue;
+      }
+      else if(check.startsWith('##')) {
+        // print("\x1B[2J\x1B[0;0H"); // clear entire screen, move cursor to 0;0
+        if(Platform.isWindows) {
+          print(Process.runSync("cmd", ['C "cls"'], runInShell: true).stdout);
+        } else {
+          print(Process.runSync("clear", [], runInShell: true).stdout);
+        }
       }
       else if(check.startsWith('exit') || check.startsWith('EXIT') ) {
         exit(0);
+      }
+      else if(check.startsWith('~~')) {
+        // save the config to shared_preferences
+        print('Settings saved!');
+        continue;
       }
       // send the chars via Morse
       sendCharacters(lineIn);
