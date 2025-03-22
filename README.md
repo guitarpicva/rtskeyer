@@ -30,6 +30,7 @@ set at 20 WPM speed, using serial port /dev/ttyUSB0 and showing the callsign
 'ab4mw' at the command prompt.
 
 The command prompt also includes a couple of commands.
+
 @@nn changes the set speed in WPM, example to change to 22 WPM send @@22 at the command line.
 
 ~~ is meant to trigger a save of current configuration to shared_preferences
