@@ -1,4 +1,4 @@
-// import 'dart:typed_data';
+import 'dart:convert';
 import 'dart:io';
 import 'package:libserialport/libserialport.dart';
 import 'alphabet.dart' as alphabet;
@@ -24,6 +24,7 @@ class Keyer {
     _dit = (1200/_speed).toInt();
     _3dit = _dit * 3;    
     _6dit = _dit * 6;   
+    loadSettings();
     getSerialPort(_port);
     listenKeys(); 
   }
@@ -46,7 +47,7 @@ class Keyer {
   }
 
   Future<void> getSerialPort(String portname) async {
-    print("Open Serial Port: $portname");
+    print("Opening Serial Port : $portname");
     // for(var s in SerialPort.availablePorts) {
     //   print("Port: $s");
     // }
@@ -66,8 +67,9 @@ class Keyer {
       _modem.config = spc;
       
       if (open) {
-        print("Serial Port: $portname is open!");
-        print('Speed set to: $_speed WPM');
+        print("Serial Port         : $portname is open!");
+        print('Speed set to        : $_speed WPM');
+        print('My callsign         : $_mycall');
         final reader = SerialPortReader(_modem);
           reader.stream.listen((data) {
           if(_debug) { print('received: $data'); }
@@ -95,6 +97,32 @@ class Keyer {
 
   keyUp(int durationMs) {
     sleep(Duration(milliseconds: durationMs));
+  }
+
+  void loadSettings() async {
+    //print('current settings: $_speed $_port $_mycall');
+    var settings = File('settings.json');
+    var jsontext = String.fromCharCodes(settings.readAsBytesSync());
+    //print('jsontext:$jsontext');
+    var prefs = jsonDecode(jsontext);
+    if(prefs['speed'] != null) {
+      _speed = prefs['speed'];
+    }
+    var stmp = prefs['mycall'].toString();
+    if(stmp.isNotEmpty) {
+      _mycall = stmp;
+    }
+    stmp = prefs['port'].toString();
+    if(stmp.isNotEmpty) {
+      _port = stmp;
+    }
+  }
+
+  void saveSettings() {
+    print('save settings: $_speed $_port $_mycall');
+    var settings = File('settings.json');
+    var jsontext = '{"speed":$_speed,"mycall":"$_mycall","port":"$_port"}';
+    settings.writeAsBytesSync(jsontext.codeUnits);
   }
 
   void listenKeys() async  {
@@ -146,6 +174,7 @@ class Keyer {
       }
       else if(check.startsWith('~~')) {
         // save the config to shared_preferences
+        saveSettings();
         print('Settings saved!');
         continue;
       }

@@ -10,8 +10,9 @@
             "request": "launch",
             "program": "bin/rtskeyer.dart",
             "args": [
-                30,
-                "/dev/ttyUSB0"
+                12,
+                "/dev/ttyUSB10",
+                "ab4mw-1"
             ]
         }
     ]
