@@ -24,7 +24,7 @@ class Keyer {
     _dit = (1200/_speed).toInt();
     _3dit = _dit * 3;    
     _6dit = _dit * 6;   
-    loadSettings();
+    print('keyer $_speed $_port $_mycall');
     getSerialPort(_port);
     listenKeys(); 
   }
@@ -81,8 +81,7 @@ class Keyer {
       } 
     }
     catch (se) {
-      // connection to radio failed, so
-      // tell the UI to open the configuration Drawer
+      // connection to device failed, so
       print('SerialException: ${se.toString()} addr:$portname');
     }
   }
@@ -99,25 +98,6 @@ class Keyer {
     sleep(Duration(milliseconds: durationMs));
   }
 
-  void loadSettings() async {
-    //print('current settings: $_speed $_port $_mycall');
-    var settings = File('settings.json');
-    var jsontext = String.fromCharCodes(settings.readAsBytesSync());
-    //print('jsontext:$jsontext');
-    var prefs = jsonDecode(jsontext);
-    if(prefs['speed'] != null) {
-      _speed = prefs['speed'];
-    }
-    var stmp = prefs['mycall'].toString();
-    if(stmp.isNotEmpty) {
-      _mycall = stmp;
-    }
-    stmp = prefs['port'].toString();
-    if(stmp.isNotEmpty) {
-      _port = stmp;
-    }
-  }
-
   void saveSettings() {
     print('save settings: $_speed $_port $_mycall');
     var settings = File('settings.json');
@@ -129,19 +109,18 @@ class Keyer {
     String check = '';
     while(true) {
       stdout.write('$_mycall$PROMPT');
-      //var lineIn = await stdin.readLineSync();
       var lineIn = stdin.readLineSync();
       if(lineIn == null || lineIn.isEmpty) { continue;}
       // Test the input line for command strings first
       // and if not a command/config, send the text
       check = '';
-      check = lineIn.length > 3 ? lineIn.substring(0,4): lineIn; // first 4 chars may be a command
+      check = lineIn.trim(); // clean the line of extra white space
       // check each command in order of typical use for efficiency
       // print("check: $check");
       if(check.startsWith('@@')) {
         print("Speed set to: ${check.substring(2)} WPM");
         // handle speed change with the text
-        _speed = int.parse(check.substring(2));
+        _speed = int.parse(check.substring(2).trim());
         _dit = (1200/_speed).toInt();
         _3dit = _dit *3;
         _6dit = _dit* 6;
@@ -168,6 +147,7 @@ class Keyer {
         } else {
           print(Process.runSync("clear", [], runInShell: true).stdout);
         }
+        continue;
       }
       else if(check.startsWith('exit') || check.startsWith('EXIT') ) {
         exit(0);
@@ -176,6 +156,15 @@ class Keyer {
         // save the config to shared_preferences
         saveSettings();
         print('Settings saved!');
+        continue;
+      }
+      else if(check.startsWith('<<')) {
+        // set the port name path i.e. /dev/ttyUSB1
+        print('port check: $check');
+        _port = check.substring(2).trim();
+        print('port:$_port');
+        saveSettings();
+        getSerialPort(_port);
         continue;
       }
       // send the chars via Morse

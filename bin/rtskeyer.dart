@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:args/args.dart';
 import 'keyer.dart';
 
@@ -32,8 +34,38 @@ void printUsage(ArgParser argParser) {
   print('Example: ./rtskeyer 22 /dev/ttyUSB0 ab4mw');
 }
 
+List<String> loadSettings() {
+  //print('current settings: $_speed $_port $_mycall');
+  var settings = File('settings.json');
+  var jsontext = String.fromCharCodes(settings.readAsBytesSync());
+  //print('jsontext:$jsontext');
+  // DEFAULTS
+  String speed = '20';
+  String port = '/dev/ttyUSB0';
+  String mycall = 'rtskeyer';
+  // parse the JSON 
+  var prefs = jsonDecode(jsontext);
+  print('prefs: $prefs');
+  if(prefs['speed'] != null) {
+    speed = prefs['speed'].toString();
+  }
+  var stmp = prefs['mycall'].toString();
+  if(stmp.isNotEmpty) {
+    mycall = stmp;
+  }
+  stmp = prefs['port'].toString();
+  if(stmp.isNotEmpty) {
+    port = stmp;
+  }
+  List<String> out = [];
+  out.add(speed);
+  out.add(port);
+  out.add(mycall);
+  return out;
+}
+
 void main(List<String> arguments) {
-  int speed = 15;
+  int speed = 20;
   String port = '/dev/ttyUSB0';
   String mycall = 'rtskeyer';
 
@@ -61,15 +93,23 @@ void main(List<String> arguments) {
     print('Positional arguments: ${results.rest}');
     try {
       int cnt = results.rest.length;
-      print('argument count: $cnt');
-      if(cnt > 0 ) {
-        speed = int.parse(results.rest[0]);
+      if(cnt < 1) {
+        var vals = loadSettings();
+        speed = int.parse(vals[0]);
+        port = vals[1];
+        mycall = vals[2];
       }
-      if(cnt > 1) {
-        port = results.rest[1];
-      }
-      if(cnt > 2) {
-        mycall = results.rest[2];
+      else {
+        print('argument count: $cnt');
+        if(cnt > 0 ) {
+          speed = int.parse(results.rest[0]);
+        }
+        if(cnt > 1) {
+          port = results.rest[1];
+        }
+        if(cnt > 2) {
+          mycall = results.rest[2];
+        }
       }
     }
     catch (e) {
@@ -80,9 +120,11 @@ void main(List<String> arguments) {
     if (debug) {
       print('[DEBUG] All arguments: ${results.arguments}');
     }  
+
     // start the keyer process which loops looking for ASCII
     // text from the keyboard to send via Morse code or commands
     // to control the keyer
+    print('START: $speed $port $mycall');
     Keyer(speed, port , mycall: mycall, debug: debug);
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
