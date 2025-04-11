@@ -51,7 +51,9 @@ index used to send the macro text.  See ^^ below.
 \#\# will clear the screen of all text and return to the cmd line.
 
 INSTALLATION REQUIREMENTS: libserialport0 (pkg name in Debian and derivatives,
-so ```sudo apt install libserialport0```
+so 
+
+```sudo apt install libserialport0```
 
 This package may or MAY NOT create the symlink for the base libserialport.so.
 If that has not been done by the package, add the symlink.  On Ubuntu 24 for
