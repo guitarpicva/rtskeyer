@@ -60,3 +60,8 @@ If that has not been done by the package, add the symlink.  On Ubuntu 24 for
 example:
 
 ```sudo ln -s /usr/lib/x86_64-linux-gnu/libserialport.0.1.0.so /usr/lib/x86_64-linux-gnu/libserialport.so```
+
+For Windows, there is a libserialport that can be installed as a .dll file, and
+which can be places in the working directory with the binary.
+
+Never tested on MacOS but I'm sure something similar is available for libserialport.
