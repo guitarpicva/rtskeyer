@@ -131,9 +131,11 @@ class Keyer {
           print('${macros.printList()}');
           continue;
         }
-        print('Sending Macro: ${check.substring(1)}');
-        var macro = macros.getMacro(int.parse(check.substring(1)));
-        sendCharacters(macro);
+        var idx = check.substring(1);
+        if(idx.isEmpty) { continue; }
+        var macro = macros.getMacro(int.parse(idx));
+        print('Sending Macro: ${check.substring(1)} - $macro');
+        sendCharacters(macro);        
         continue;
       }
       else if(check.startsWith('??') ) {
