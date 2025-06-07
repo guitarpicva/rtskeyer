@@ -5,19 +5,33 @@ import 'alphabet.dart' as alphabet;
 import 'helptext.dart';
 import 'macros.dart' as macros;
 
+/// Keyer creates a CLI program to utilize a serial
+/// port key line for sending Morse code via a radio
 class Keyer {
+  /// the serial port to connect with
   String _port = '/dev/ttyUSB0';
+  /// the default sending speed in WPM
   int _speed = 20;
+  /// the calculated millisecond length of a DIT
   int _dit = 60; // 1200/speed in WPM
+  /// the calculated millisecond length of 3 DITs (DAH)
   int _3dit = 180; // 3 dit lengths at WPM
-  int _6dit = 360; // word space 6 dit lengths at WPM
+  /// the calculated millisecond length of a word space
+  int _6dit = 360;
+  /// SerialPort object for read/write to the radio
   late SerialPort _modem;
+  /// the configuration values for the serial port
   late SerialPortConfig spc;
+  /// carriage return followed by line feed
   final String CRLF = '\r\n';
+  /// prompt character
   final String PROMPT = '> ';
+  /// user call sign or prompt text
   String _mycall = 'rtskeyer';
+  /// toggle debug mode
   bool _debug = false;
   
+  /// Create an object and calculate the running state values
   Keyer(int speed, String port, {String mycall = 'rtskeyer', bool debug = false})
   :_speed = speed, _port = port, _mycall = mycall, _debug = debug
   {    
@@ -29,6 +43,7 @@ class Keyer {
     listenKeys(); 
   }
 
+  /// given the String [line], send the characters in Morse code
   void sendCharacters(String line) {
     if(_debug) { print("Dit duration: $_dit"); }
     String abet;
@@ -46,6 +61,7 @@ class Keyer {
     keyUp(_6dit);    
   }
 
+  /// gather, open and apply the settings to the serial port
   Future<void> getSerialPort(String portname) async {
     print("Opening Serial Port : $portname");
     // for(var s in SerialPort.availablePorts) {
@@ -86,6 +102,7 @@ class Keyer {
     }
   }
 
+  /// the key circuit is on for durationMs
   void keyDown(int durationMs) {
     spc.rts = 1;
     _modem.config = spc;
@@ -94,10 +111,12 @@ class Keyer {
     _modem.config = spc;
   }
 
+  /// the key circuit is off for durationMs
   keyUp(int durationMs) {
     sleep(Duration(milliseconds: durationMs));
   }
 
+  /// save the settings to a json file named settings.json
   void saveSettings() {
     print('save settings: $_speed $_port $_mycall');
     var settings = File('settings.json');
@@ -105,6 +124,9 @@ class Keyer {
     settings.writeAsBytesSync(jsontext.codeUnits);
   }
 
+  /// gather key strokes from the user and act by either
+  /// sending the data in Morse code or performing an action
+  /// to change the configuration or call up a macro text
   void listenKeys() async  {
     String check = '';
     while(true) {

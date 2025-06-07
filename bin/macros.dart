@@ -5,13 +5,15 @@ List<String> macros = List<String>.filled(9, '');
 
 String getMacro(int index) {
   //print('getMacro: $index');
-  File f = File('bin/macros.json');
+  File f = File('macros.json');
   String json = f.readAsStringSync();
   // print(json);
   List<dynamic> macro = jsonDecode(json);
   // print('macro length:${macro.length}');
   if(macro.length >= index) {
     //print(macro[index-1]);
+    // minus one because the JSON is
+    // zero based list of course
     return macro[index-1];
   }
   else { 
@@ -21,7 +23,7 @@ String getMacro(int index) {
 }
 
 String printList() {
-  File f = File('bin/macros.json');
+  File f = File('macros.json');
   String json = f.readAsStringSync();
   // print(json);
   List<dynamic> macro = jsonDecode(json);

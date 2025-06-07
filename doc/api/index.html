@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="rtskeyer API docs, for the Dart programming language.">
+  <title>rtskeyer - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">rtskeyer package</li>
+  </ol>
+  <div class="self-name">rtskeyer</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <p>A stdin/stdout application to send Morse code using a serial RTS keying device</p>
+<p>Just one example, which I use:</p>
+<p><a href="https://www.ebay.com/itm/355950221050?mkcid=16&amp;mkevt=1&amp;mkrid=711-127632-2357-0&amp;ssspo=8gUlvEMKShm&amp;sssrc=2047675&amp;ssuid=7YI7a7yESla&amp;widget_ver=artemis&amp;media=COPY">https://www.ebay.com/itm/355950221050?mkcid=16&amp;mkevt=1&amp;mkrid=711-127632-2357-0&amp;ssspo=8gUlvEMKShm&amp;sssrc=2047675&amp;ssuid=7YI7a7yESla&amp;widget_ver=artemis&amp;media=COPY</a></p>
+<p>A device such as this will toggle the RTS line of a serial port from its
+internal USB to RS-232 converter.  Most radios have 3.5mm keying ports now, so
+this little device can be used to key a radio when the radio is set into
+straight key mode (like a keyer device).</p>
+<p>This should work with any RS-232 serial port, however, be mindful of any odd
+keying voltages particularly from older radios.  Modern radios can usually
+deal with the RTS keying just fine.</p>
+<p>Check your signal with a remote SDR or a friend to ensure that there are no
+keying clicks audible over the air.  If so a key click capacitor might have to
+be introduced to avoid this.  I have not found it to be the case using the
+USB to RS-232 RTS keying device linked above.</p>
+<p>The program expects the USB/Serial device to be ready when the program starts.</p>
+<p>Once the program starts, you will then notice a prompt "CALLSIGN&gt; ".  If no
+callsign is supplied it will read "rtskeyer&gt;".</p>
+<p>Type in the text to send by Morse code and it will be keyed to the radio (or code practice oscillator).</p>
+<p>Invocation example: <code>./rtskeyer 20 /dev/ttyUSB0 ab4mw</code>  would start the program
+set at 20 WPM speed, using serial port /dev/ttyUSB0 and showing the callsign
+'ab4mw' at the command prompt.</p>
+<p>The command prompt also includes a couple of commands.</p>
+<p>@@nn changes the set speed in WPM, example to change to 22 WPM send @@22 at the command line.</p>
+<p>~~ is meant to trigger a save of current configuration to shared_preferences
+but this is not yet implemented and is left as a placeholder.  This may simply
+be implemented as a config file on the file system, but the thought is to
+use shared preferences so this may be run on Android/iOS as well as Linux and
+Windows</p>
+<p>The literal command 'exit' at the start of the command line will immediately
+close the program.</p>
+<p>^n will look up the macro substitution text from macros.json and send it.
+The macros.json file is simply a string list.  The index in the list is the
+index used to send the macro text.  See ^^ below.</p>
+<p>^^ will print a list of defined macros contained in the macros.json file.</p>
+<p>## will clear the screen of all text and return to the cmd line.</p>
+<p>INSTALLATION REQUIREMENTS: libserialport0 (pkg name in Debian and derivatives,
+so</p>
+<p><code>sudo apt install libserialport0</code></p>
+<p>This package may or MAY NOT create the symlink for the base libserialport.so.
+If that has not been done by the package, add the symlink.  On Ubuntu 24 for
+example:</p>
+<p><code>sudo ln -s /usr/lib/x86_64-linux-gnu/libserialport.0.1.0.so /usr/lib/x86_64-linux-gnu/libserialport.so</code></p>
+<p>For Windows, there is a libserialport that can be installed as a .dll file, and
+which can be placed in the working directory with the binary.</p>
+<p>Never tested on MacOS but I'm sure something similar is available for libserialport.</p>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">rtskeyer package</li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">rtskeyer</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    rtskeyer
+      0.0.1
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
