@@ -53,13 +53,7 @@ index used to send the macro text.  See ^^ below.
 INSTALLATION REQUIREMENTS: libserialport0 (pkg name in Debian and derivatives,
 so 
 
-```sudo apt install libserialport0```
-
-This package may or MAY NOT create the symlink for the base libserialport.so.
-If that has not been done by the package, add the symlink.  On Ubuntu 24 for
-example:
-
-```sudo ln -s /usr/lib/x86_64-linux-gnu/libserialport.0.1.0.so /usr/lib/x86_64-linux-gnu/libserialport.so```
+```sudo apt install libserialport-dev```
 
 For Windows, there is a libserialport that can be installed as a .dll file, and
 which can be placed in the working directory with the binary.
