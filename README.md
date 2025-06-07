@@ -50,7 +50,7 @@ index used to send the macro text.  See ^^ below.
 
 \#\# will clear the screen of all text and return to the cmd line.
 
-INSTALLATION REQUIREMENTS: libserialport0 (pkg name in Debian and derivatives,
+INSTALLATION REQUIREMENTS: libserialport-dev (pkg name in Debian and derivatives,
 so 
 
 ```sudo apt install libserialport-dev```
