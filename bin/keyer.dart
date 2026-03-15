@@ -77,8 +77,8 @@ class Keyer {
     spc.stopBits = 1;
     spc.setFlowControl(SerialPortFlowControl.none);
     spc.rts = 0;
-    _modem = SerialPort(portname); // i.e. ttyUSB0
     try {
+      _modem = SerialPort(portname); // i.e. ttyUSB0    
       open = _modem.openReadWrite();
       _modem.config = spc;
       
@@ -99,6 +99,7 @@ class Keyer {
     catch (se) {
       // connection to device failed, so
       print('SerialException: ${se.toString()} addr:$portname');
+      stdout.writeln('Serial Port does not exist.  Try another one maybe?');
     }
   }
 
